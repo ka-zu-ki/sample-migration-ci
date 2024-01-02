@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  bytebase:
+    image: bytebase/bytebase:2.13.0
+    container_name: bytebase
+    restart: always
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8080/healthz", "||", "exit", "1" ]
+      interval: 5m
+      timeout: 10s
+    volumes:
+      - ~/.bytebase/data:/var/opt/bytebase
+    command: --data /var/opt/bytebase --port 8080
+  postgres:
+    image: postgres:14.10-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports:
+      - "5432:5432"
